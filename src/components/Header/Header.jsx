@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Header.css";
 import logo from "../../images/Logo.svg";
 import { Link } from "react-router-dom";
@@ -6,7 +6,16 @@ import { AuthContext } from "../providers/AuthProvider";
 
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [success, setSuccess] = useState("");
+
   console.log(user);
+  const handleLogOut = () => {
+    logOut()
+      .then((result) => {
+        setSuccess(result.user);
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <nav className="header">
       <img src={logo} alt="" />
@@ -19,12 +28,12 @@ const Header = () => {
         {user && (
           <span>
             <span style={{ color: "white" }}>
-              Welcome{user.email} <button onClick={logOut}>SignOut</button>
+              <button onClick={handleLogOut}>SignOut</button>
             </span>
           </span>
         )}
       </div>
-      button
+      <p>{success}</p>
     </nav>
   );
 };
